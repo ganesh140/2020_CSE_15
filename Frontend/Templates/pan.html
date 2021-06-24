@@ -1,0 +1,46 @@
+<html>
+<head>
+<title>Upload Pancard</title>
+</head>
+
+<center><h1>UPLOAD PAN CARD IMAGE</h1></center>
+<link rel="stylesheet" href="static/css/aadhar.css">
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+<script class="jsbin" src="static/js/aadhar.js"></script>
+
+<div class="cont">
+        <img src="static/images/1.png" width="400" height="200">
+</div>
+<div class="center">
+    <div class="image-upload-wrap">
+        <input class="file-upload-input" type='file' onchange="readURL(this);" accept="image/*" />
+        <div class="drag-text">
+        <h3>Drag and drop Image or click to select Image</h3>
+        </div>
+    </div>
+    <div class="file-upload-content">
+        <img class="file-upload-image" src="#" alt="your image" />
+        <div class="image-title-wrap">
+        <button type="button" onclick="removeUpload()" class="remove-image">Remove <span class="image-title">Uploaded PAN Card Image</span></button>
+        </div>
+    </div>
+    <h3>RESIZE YOUR IMAGE HERE : </h3>
+    <label>Select a choice</label>
+    <select>
+        <option value="Mar">Maintain Aspect Ratio</option>
+        <option value="Hr">Hard Resizing</option>
+    </select>
+    <form method=post>
+        <center><h4>Width</h4><input type="number" name="width"> px
+        <h4>Height</h4><input type="number" name="height"> px
+        <br><br><input type="submit" value=Confirm></center>
+    </form>
+    <div class="file-upload">
+        <h2>OR ENTER PAN CARD NUMBER</h2>
+    <form method=post>
+        <input type="text" name="number">
+        <br><br><input type=submit class="file-upload-btn" value=Submit>
+    </form>
+    </div>
+</div>
+</html>
