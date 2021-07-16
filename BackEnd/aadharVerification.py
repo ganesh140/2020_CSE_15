@@ -35,20 +35,31 @@ def aadhar_auth_img(img)  :
             l.append(i)
             print(i)
     url = "https://resident.uidai.gov.in/verify"
+    t = time.time()
     options = webdriver.ChromeOptions()
     options.add_argument("headless")
+    prefs = {"profile.managed_default_content_settings.images": 2}
+    options.add_experimental_option("prefs", prefs)
+    options.add_argument("--ignore-certificate-error")
+    options.add_argument("--ignore-ssl-errors")
+    options.add_experimental_option('excludeSwitches', ['enable-logging'])
     driver = webdriver.Chrome(executable_path=binary_path,options=options)  
-    driver.get(url)  
+    driver.set_page_load_timeout(10)
+    try:
+        driver.get(url)  
+    except :
+        driver.execute_script("window.stop();")
     time.sleep(1)  
     html = driver.page_source 
     if(len(l)==0):
-        return False,"Photo uploaded"
+        return False,1
     for i in l:
         inputElement = driver.find_element_by_id("uidno")
         inputElement.send_keys(i)
         output= driver.find_element_by_class_name("errormsgClass")
         if(output.get_attribute("style")=="display: block;"):
             print("invalid",i)
+            return False,i
         else:
             print("valid",i)
             driver.find_element_by_id("uidno").clear()
@@ -58,26 +69,37 @@ def aadhar_auth_img(img)  :
 
 
 def aadhar_auth_number(num)  :
-    if len(num)!=12:
-        return False,num
-    url = "https://resident.uidai.gov.in/verify"
-    options = webdriver.ChromeOptions()
-    options.add_argument("headless")
-    driver = webdriver.Chrome(executable_path=binary_path,options=options)  
-    driver.get(url)  
-    time.sleep(1)  
-    i=num
-    html = driver.page_source 
-    inputElement = driver.find_element_by_id("uidno")
-    inputElement.send_keys(i)
-    output= driver.find_element_by_class_name("errormsgClass")
-    if(output.get_attribute("style")=="display: block;"):
-        print("invalid",i)
-    else:
-        print("valid",i)
-        return True,i
-    driver.find_element_by_id("uidno").clear()
-    return False,i
+    regex = ("^[2-9]{1}[0-9]{3}\\" +"s[0-9]{4}\\s[0-9]{4}$")
+    p = re.compile(regex)
+    if(re.search(p, num)):
+        url = "https://resident.uidai.gov.in/verify"
+        options = webdriver.ChromeOptions()
+        options.add_argument("headless")
+        prefs = {"profile.managed_default_content_settings.images": 2}
+        options.add_experimental_option("prefs", prefs)
+        options.add_argument("--ignore-certificate-error")
+        options.add_argument("--ignore-ssl-errors")
+        options.add_experimental_option('excludeSwitches', ['enable-logging'])
+        driver = webdriver.Chrome(executable_path='chromedriver',options=options)  
+        driver.set_page_load_timeout(10)
+        try:
+            driver.get(url)  
+        except :
+            driver.execute_script("window.stop();") 
+        time.sleep(1)  
+        i=num
+        html = driver.page_source 
+        inputElement = driver.find_element_by_id("uidno")
+        inputElement.send_keys(i)
+        output= driver.find_element_by_class_name("errormsgClass")
+        if(output.get_attribute("style")=="display: block;"):
+            print("invalid",i)
+            return False,i
+        else:
+            print("valid",i)
+            return True,i
+    print("invalid")
+    return False,num
 
 
 # img=cv2.imread("D:/awesome/aadhar.jpg")
